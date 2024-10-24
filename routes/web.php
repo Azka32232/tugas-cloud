@@ -9,11 +9,19 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::view('profile', 'profile')
+/*Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+*/
+Route::middleware(['auth'])->group(function () {
+    // Route untuk menampilkan profile
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-Route::get('/profile/show', [ProfileController::class, 'show'])->name('profile.show');
-Route::post('/profile/edit', [ProfileController::class, 'uploadPhoto'])->name('profile.upload');
+    // Route untuk mengedit profile (form edit)
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route untuk update profile (submit form edit)
+    Route::post('/profile/show', [ProfileController::class, 'update'])->name('profile.show');
+});
 
 require __DIR__.'/auth.php';
